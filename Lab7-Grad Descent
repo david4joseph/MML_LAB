@@ -1,0 +1,36 @@
+import sympy as sp
+import numpy as np
+
+x, y = sp.symbols('x y')
+f1 = x - y + 2*(x**2) + 2*x*y + y**2
+fx = sp.diff(f1, x)
+fy = sp.diff(f1, y)
+f = sp.Matrix([[fx],[fy]])
+print("Gradient Vector:")
+display(f)
+print("\n")
+fxx = sp.diff(fx, x)
+fxy = sp.diff(fx, y)
+fyy = sp.diff(fy, y)
+Hessian = sp.Matrix([[fxx, fxy], [fxy, fyy]])
+print("Hessian matrix:")
+display(Hessian)
+x_val = np.array([[0], [0]])
+
+for i in range(4):
+    Hessian_at_point = np.array(Hessian.subs({x: x_val[0, 0], y: x_val[1, 0]})).astype(float)
+    grad = np.array([[fx.subs({x: x_val[0, 0], y: x_val[1, 0]})],
+                     [fy.subs({x: x_val[0, 0], y: x_val[1, 0]})]], dtype=float)
+    s = -grad
+    l = np.dot(s.T, s) / (np.dot(np.dot(s.T, Hessian_at_point), s))
+    x_new = x_val + l * s
+    grad_new = np.array([[fx.subs({x: x_new[0, 0], y: x_new[1, 0]})],
+                         [fy.subs({x: x_new[0, 0], y: x_new[1, 0]})]], dtype=float)
+    f1_value = f1.subs({x: x_new[0, 0], y: x_new[1, 0]})
+    print(f"\nIteration {i + 1}:")
+    print("New Point:")
+    sp.pprint(x_new)
+    print("Gradient at new point:")
+    sp.pprint(grad_new)
+    print(f"f(X{i+1}): {f1_value}")
+    x_val = x_new
