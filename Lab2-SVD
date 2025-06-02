@@ -1,0 +1,14 @@
+from PIL import Image
+import numpy as np
+from IPython.display import display
+
+img = Image.open(r"C:\Users\Vishnu Reddy\OneDrive\Documents\Jee\smiling cat.jpg")
+gray_img_matrix = np.array(img.convert('L'))
+U, S, VT = np.linalg.svd(gray_img_matrix)
+k = int(input("Enter the number of singular values k (k < 500): "))
+U, S, VT = U[:, :k], S[:k], VT[:k, :]
+S_matrix = np.diag(S)
+new_A = np.dot(U, np.dot(S_matrix, VT))
+print(new_A)
+reconstructed_img = Image.fromarray(np.uint8(np.clip(new_A, 0, 255)))
+display(reconstructed_img)
