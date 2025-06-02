@@ -1,0 +1,19 @@
+import sympy as sp
+
+x, y, z, lamda = sp.symbols('x y z lamda')
+f = (x - 3)**2 + (y - 4)**2 + (z - 12)**2
+f1 = x**2 + y**2 + z**2 - 1
+L = f + lamda * f1
+Lx, Ly, Lz = sp.diff(L, x), sp.diff(L, y), sp.diff(L, z)
+eq1, eq2, eq3, eq4 = sp.Eq(Lx, 0), sp.Eq(Ly, 0), sp.Eq(Lz, 0), sp.Eq(f1, 0)
+
+solutions = sp.solve([eq1, eq2, eq3, eq4], (x, y, z, lamda))
+s1, s2 = solutions[0], solutions[1]
+fs1 = f.subs({x: s1[0], y: s1[1], z: s1[2]})
+fs2 = f.subs({x: s2[0], y: s2[1], z: s2[2]})
+if fs1>fs2:
+    print(f"The maximum value is achieved at {s1[0:3]} is {fs1}")
+    print(f"The minimum value is achieved at {s2[0:3]} is {fs2}")
+else:
+    print(f"The maximum value is achieved at {s2[0:3]} is {fs2}")
+    print(f"The minimum value is achieved at {s1[0:3]} is {fs1}")   
