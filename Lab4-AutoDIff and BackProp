@@ -1,0 +1,17 @@
+import sympy as sp
+
+x,b,c,d,e,f = sp.symbols('x b c d e f')
+b1 = 5*x
+c1 = 3*x
+d1 = sp.exp(b)
+e1 = sp.cos(c)
+f1 = d + e
+
+first_term = (sp.diff(f1,d))*(sp.diff(d1,b))*(sp.diff(b1,x))
+print(first_term)
+second_term = (sp.diff(f1,e))*(sp.diff(e1,c))*(sp.diff(c1,x))
+print(second_term)
+f_diff = first_term + second_term
+display(f_diff)
+f_diff_sub = f_diff.subs({b:5*x, c:3*x})
+display(f_diff_sub)
