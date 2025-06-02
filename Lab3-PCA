@@ -1,0 +1,65 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+def PCA(x, y):
+    x_mean, y_mean = np.mean(x), np.mean(y)
+    new_x, new_y = x - x_mean, y - y_mean
+    X = np.array([new_x, new_y])
+    n = len(x)
+    S = np.dot(X, X.T) / (n - 1)
+    eig_val, eig_vect = np.linalg.eig(S)
+    pc1 = eig_vect[:, np.argmax(eig_val)]
+    oneD_data = np.dot(pc1.T, X)
+    return x_mean, y_mean, X, S, pc1, oneD_data
+
+a = np.array([2.5, 0.5, 2.2, 1.9, 3.1, 2.3, 2, 1, 1.5, 1.1])
+b = np.array([2.4, 0.7, 2.9, 2.2, 3, 2.7, 1.6, 1.1, 1.6, 0.9])
+x_mean, y_mean, X, S, pc1, oneD_data = PCA(a, b)
+print(f"The X matrix is \n{X}\n")
+print(f"The covariance matrix is \n{S}\n")
+print(f"The first principal component is {pc1}\n")
+print(f"The 1-D data is \n{oneD_data}")
+
+line_length = 3
+x_line = np.linspace(min(a) - 1, max(a) + 1, 100)
+y_line = y_mean + (pc1[1] / pc1[0]) * (x_line - x_mean)
+plt.scatter(a, b, label="Original Data")
+plt.scatter(x_mean, y_mean, color="red", label="Mean Point")
+plt.plot(x_line, y_line, "g--", label="Principal Component")
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.legend()
+plt.grid()
+plt.show()
+
+
+################################################################################################################
+import numpy as np
+import matplotlib.pyplot as plt
+
+def PCA(x, y):
+    x_mean,y_mean = np.mean(x),np.mean(y)
+    new_x, new_y = x - x_mean,y - y_mean
+    X = np.array([new_x, new_y])
+    n = len(x)
+    S = np.dot(X, X.T) / (n - 1)
+    eig_val, eig_vect = np.linalg.eig(S)
+    pc1 = eig_vect[:, np.argmax(eig_val)]
+    oneD_data = np.dot(pc1.T, X)
+    return x_mean,y_mean,X,S,pc1,oneD_data
+
+a = np.array([2.5, 0.5, 2.2, 1.9, 3.1, 2.3, 2, 1, 1.5, 1.1])
+b = np.array([2.4, 0.7, 2.9, 2.2, 3, 2.7, 1.6, 1.1, 1.6, 0.9])
+x_mean,y_mean,X,S,pc1,oneD_data = PCA(a, b)
+print(f"The X matrix is \n{X}\n")
+print(f"The covariance matrix is \n{S}\n")
+print(f"The first principal component is {pc1}\n")
+print(f"The 1-D data is {oneD_data}")
+
+line_length = 10
+x_line = np.array([x_mean - line_length * pc1[0], x_mean + line_length * pc1[0]])
+y_line = np.array([y_mean - line_length * pc1[1], y_mean + line_length * pc1[1]])
+plt.plot(a, b, "o")
+plt.plot(x_mean, y_mean, "o")
+plt.plot([pc1[0], x_mean], [pc1[1], y_mean])
+plt.show()
